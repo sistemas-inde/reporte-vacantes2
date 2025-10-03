@@ -1,0 +1,175 @@
+<div class="container mt-4">
+  <h2>Vacantes</h2>
+  <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#nuevaVacanteModal">
+    + Nueva Vacante
+  </button>
+
+  <!-- Tabla de vacantes (ejemplo de relleno) -->
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Clave</th>
+        <th>Puesto</th>
+        <th>Departamento</th>
+        <th>Solicitante</th>
+        <th>Estatus</th>
+        <th>Sueldo</th>
+        <th>Fecha Solicitud</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>VAC-001</td>
+        <td>Diseñador Gráfico</td>
+        <td>Marketing</td>
+        <td>RH</td>
+        <td><span class="badge bg-success">Abierta</span></td>
+        <td>$15,000</td>
+        <td>03/10/2025</td>
+        <td>
+          <button
+            class="btn btn-sm btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#nuevaVacanteModal"
+          >
+            Editar
+          </button>
+
+          <button
+            class="btn btn-sm btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#eliminarVacanteModal"
+          >
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Nueva Vacante -->
+<div
+  class="modal fade"
+  id="nuevaVacanteModal"
+  tabindex="-1"
+  aria-labelledby="nuevaVacanteLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="nuevaVacanteLabel">Registrar Vacante</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Puesto</label>
+              <select class="form-select">
+                <option>Seleccionar puesto...</option>
+                <option value="1">Diseñador Gráfico</option>
+                <option value="2">Residente de Obra</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Departamento</label>
+              <select class="form-select">
+                <option>Seleccionar departamento...</option>
+                <option value="1">Marketing</option>
+                <option value="2">Construcción</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Solicitante</label>
+              <select class="form-select">
+                <option>Seleccionar solicitante...</option>
+                <option value="1">RH</option>
+                <option value="2">Sistemas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Razón Social</label>
+              <select class="form-select">
+                <option>Seleccionar razón social...</option>
+                <option value="1">INDE México</option>
+                <option value="2">Subsidiaria X</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tipo de Vacante</label>
+              <select class="form-select">
+                <option>Seleccionar tipo...</option>
+                <option value="1">Tiempo completo</option>
+                <option value="2">Medio tiempo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Estatus</label>
+              <select class="form-select">
+                <option>Seleccionar estatus...</option>
+                <option value="1">Abierta</option>
+                <option value="2">En proceso</option>
+                <option value="3">Pausada</option>
+                <option value="4">Cubierta</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Sueldo</label>
+              <input type="number" class="form-control" placeholder="Ej: 15000" />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fecha Solicitud</label>
+            <input type="date" class="form-control" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Eliminación -->
+<div
+  class="modal fade"
+  id="eliminarVacanteModal"
+  tabindex="-1"
+  aria-labelledby="eliminarVacanteLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="eliminarVacanteLabel">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        ¿Estás seguro de que deseas eliminar esta vacante?
+        <br />
+        <small class="text-muted">Esta acción no se puede deshacer.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
