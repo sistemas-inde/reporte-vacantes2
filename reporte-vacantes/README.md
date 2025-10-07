@@ -195,3 +195,155 @@ Ejecutar nuevamente "ng build --configuration production".
 Subir los nuevos archivos compilados dentro de /front/.
 
 No es necesario modificar el .htaccess ni el base href a menos que cambie la ruta.
+
+🧩 Funcionamiento Interno del Backend (API PHP + MySQL)
+
+El backend del sistema está desarrollado en PHP 8.x utilizando PDO para la conexión a la base de datos MySQL.
+Toda la comunicación entre Angular y el servidor se realiza a través de endpoints REST que responden en formato JSON.
+
+📂 Estructura de Carpetas y Propósito
+/reporte_vacantes/api/
+│
+├── config/
+│ └── database.php
+│
+├── models/
+│ └── Usuario.php
+│
+└── endpoints/
+├── register.php
+└── login.php
+
+🔧 config/ — Configuración de Conexión
+
+Contiene los archivos de configuración global del sistema.
+
+database.php
+Define la clase Database, encargada de establecer la conexión con MySQL mediante PDO.
+Se utiliza en todos los scripts del backend para ejecutar consultas de manera segura y reutilizable.
+
+$database = new Database();
+$conn = $database->getConnection();
+
+🧠 PDO permite evitar inyecciones SQL, manejar errores con excepciones y trabajar con UTF-8.
+
+👤 models/ — Lógica de Negocio
+
+Contiene las clases que representan las entidades principales del sistema (por ejemplo, Usuario, Vacante, etc.).
+Cada modelo define las funciones necesarias para interactuar con la base de datos.
+
+Usuario.php
+Incluye dos métodos principales:
+
+register() → Crea un nuevo usuario en la base de datos y encripta la contraseña usando password_hash().
+
+login() → Valida credenciales utilizando password_verify() y devuelve los datos del usuario si son correctos.
+
+🔒 Esto garantiza que las contraseñas nunca se almacenen en texto plano.
+
+🌐 endpoints/ — Puntos de Entrada (API REST)
+
+Aquí se encuentran los archivos que funcionan como controladores públicos de la API.
+Cada uno recibe los datos en formato JSON, llama a su modelo correspondiente y devuelve la respuesta al frontend.
+
+register.php → Registra nuevos usuarios.
+
+login.php → Valida credenciales y devuelve los datos del usuario autenticado.
+
+📬 Todos los endpoints devuelven respuestas uniformes en JSON (por ejemplo: { "status": "success", "message": "..." }).
+
+⚙️ .htaccess — Configuración de Rutas y Seguridad
+
+Se implementaron archivos .htaccess para permitir que el backend (PHP) y el frontend (Angular) coexistan en el mismo dominio.
+
+📍 En /reporte_vacantes/.htaccess
+
+Permite el acceso a la carpeta api sin que Angular intercepte las peticiones.
+
+RewriteEngine On
+
+# Permitir acceso directo a la API
+
+RewriteCond %{REQUEST_URI} ^/reporte_vacantes/api/
+RewriteRule .\* - [L]
+
+# Redirección del frontend Angular
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^reporte_vacantes/front/index.html [L]
+
+📍 En /reporte_vacantes/api/.htaccess
+
+Desactiva las redirecciones y habilita CORS para que Angular o Postman puedan acceder al backend.
+
+RewriteEngine Off
+Options +Indexes +FollowSymLinks
+DirectoryIndex index.php
+
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+🧪 Pruebas del Backend (Postman)
+
+Antes de conectarlo con Angular, se realizaron pruebas con Postman para confirmar el correcto funcionamiento del backend.
+
+📮 Registro de Usuario (POST)
+
+URL:
+
+https://indemexico.mx/reporte_vacantes/api/endpoints/register.php
+
+Body (JSON):
+
+{
+"nombre_usuario": "Gustavo Alonso",
+"correo": "sistemas5.inde@gmail.com",
+"password_hash": "dev7201",
+"id_rol": 1
+}
+
+Respuesta esperada:
+
+{
+"status": "success",
+"message": "Usuario registrado correctamente."
+}
+
+📘 El usuario se guarda correctamente en la base de datos con una contraseña hasheada ($2y$10$...).
+
+🔐 Inicio de Sesión (POST)
+
+URL:
+
+https://indemexico.mx/reporte_vacantes/api/endpoints/login.php
+
+Body (JSON):
+
+{
+"correo": "sistemas5.inde@gmail.com",
+"password_hash": "dev7201"
+}
+
+Respuesta esperada (éxito):
+
+{
+"status": "success",
+"message": "Inicio de sesión exitoso.",
+"usuario": {
+"id_usuario": 1,
+"nombre_usuario": "Gustavo Alonso",
+"correo": "sistemas5.inde@gmail.com",
+"id_rol": 1
+}
+}
+
+🧱 Flujo General del Backend
+Angular (frontend)
+↓ [POST /login o /register]
+PHP (API → endpoints/)
+↓ [usa models/ para acceder a datos]
+MySQL (base de datos)
